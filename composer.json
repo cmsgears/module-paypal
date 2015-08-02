@@ -14,7 +14,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"cmsgears\\paypal\\rest": ""
+			"cmsgears\\paypal\\rest\\": ""
 		}
 	},
     "require": {
