@@ -1,5 +1,5 @@
 <?php
-namespace common\utilities;
+namespace cmsgears\paypal\rest\common\services;
 
 // Yii Imports
 use \Yii;
@@ -24,20 +24,23 @@ use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\ShippingAddress;
 
-class PaypalRestUtil {
+// CMG Imports
+use cmsgears\paypal\rest\common\config\PaypalRestProperties;
+
+class PaypalRestService {
 
 	private $properties;
 	private $successUrl;
 	private $failureUrl;
 
-	public function __construct( $properties, $scenario ) {
+	public function __construct( $baseUrl = null ) {
 
-		$this->properties = $properties;
+		$this->properties = PaypalRestProperties::getInstance();
+		
+		if( isset( $baseUrl ) ) {
 
-		if( strcmp( $scenario, "booking" ) == 0 ) {
-
-			$this->successUrl = Url::home( true ) . Url::to( "payment/success" );
-			$this->failureUrl = Url::home( true ) . Url::to( "payment/failure" );
+			$this->successUrl = $baseUrl . '/payment-success';
+			$this->failureUrl = $baseUrl . '/payment-failure';
 		}
 	}
 
@@ -93,48 +96,49 @@ class PaypalRestUtil {
         $amount->setDetails($details);
     */ 
 
-	// Utlity Methods ---------------------------------------
+	// PaypalRestService ------------------------------------
 
-	function generateShippingAddress( $cart ) {
+	function isPaymentActive() {
 
-		// TODO - Generate Shipping Address from Cart
+		return $this->properties->isPaymentActive();		
+	}
+
+	function generateShippingAddress( $addressee, $address ) {
 
         $address   = new ShippingAddress();
-        $address->setRecipientName( "Test Receipient" );
-        $address->setLine1( "line 1" );
-        $address->setLine2( "line 2" );
-        $address->setCity( "Ontario" );
-        $address->setState( "Toronto" );
-        $address->setCountryCode( "CA" );
-        $address->setPostalCode( "M5A4E9" );
+
+        $address->setRecipientName( $addressee );
+        $address->setLine1( $address->line1 );
+        $address->setLine2( $address->line2 );
+        $address->setCity( $address->city );
+        $address->setState( $address->province->name );
+        $address->setCountryCode( $address->country->name );
+        $address->setPostalCode( $address->zip );
 
 		return $address;
 	}
 
-	function generateItemsList( $cart ) {
-
-		// TODO - Generate Items List from Cart
+	function generateItemsList( $order ) {
 
 		$currency	= $this->properties->getCurrency();
+		$orderItems	= $order->items;
         $items   	= array();
 
-        $item   = new Item();
-        $item->setName( "Test Item 1" );
-        $item->setQuantity( 2 );
-        $item->setCurrency( $currency );
-        $item->setPrice( 10.00 );        
-        $item->setSku( 1 );
+		foreach ( $orderItems as $orderItem ) {
 
-        $items[] = $item;
+	        $item   = new Item();
+	        $item->setName( $orderItem->name );
+	        $item->setQuantity( $orderItem->quantity );
+	        $item->setCurrency( $currency );
+	        $item->setPrice( $orderItem->price );   
+			
+			if( isset( $orderItem->sku ) ) {
+				
+				$item->setSku( $orderItem->sku );	
+			}
 
-        $item   = new Item();
-        $item->setName( "Test Item 2" );
-        $item->setQuantity( 1 );
-        $item->setCurrency( $currency );
-        $item->setPrice( 10.00 );        
-        $item->setSku( 2 );
-
-        $items[] = $item;
+	        $items[] = $item;
+		}
 
         $itemList = new ItemList();
 
@@ -142,31 +146,32 @@ class PaypalRestUtil {
 
 		return $itemList;
 	}
-    
-	// Payment Methods --------------------------------------
 
-	public function createPayment( $cart, $description ) {
+	public function createPayment( $addressee, $order ) {
 
-		// Cart Totals
-	    $subTotal     		= 30.00; // TODO - Replace with cart total
-		$shippingCharges	=  0.00; // TODO - Replace with cart total
-		$tax				=  0.00; // TODO - Replace with cart total
-		$grandTotal   		= 30.00; // TODO - Replace with cart total
+		// Order Totals
+	    $subTotal     		= $order->total;
+		$shippingCharges	= $order->shipping;
+		$tax				= $order->tax;
+		$grandTotal   		= $order->grandTotal;
 
 		// Get Context
-		$context = $this->getApiContext();
+		$context 	= $this->getApiContext();
 
 		// Payer
-		$payer = new Payer();
-		$payer->setPaymentMethod( "paypal" );
-
-        // Shipping Address
-        $shippingAddress	= $this->generateShippingAddress( $cart );
+		$payer 		= new Payer();
+		$payer->setPaymentMethod( 'paypal' );
 
         // Cart Items
-        $itemList   		= $this->generateItemsList( $cart );
+        $itemList   = $this->generateItemsList( $order );
 
-        $itemList->setShippingAddress( $shippingAddress );
+        // Shipping Address
+        if( $this->properties->isSendAddress() ) {
+
+	        $shippingAddress	= $this->generateShippingAddress( $addressee, $cart );
+
+			$itemList->setShippingAddress( $shippingAddress );
+		}
 
         // Details
         $details = new Details();
@@ -183,7 +188,12 @@ class PaypalRestUtil {
 		// Transaction
 		$transaction = new Transaction();
 		$transaction->setAmount( $amount );
-		$transaction->setDescription( $description );
+		
+		if( isset( $order->description ) ) {
+
+			$transaction->setDescription( $order->description );
+		}
+
 		$transaction->setItemList( $itemList );
 
 		// Status URLs
@@ -203,17 +213,48 @@ class PaypalRestUtil {
 		return $payment;
 	}
 
-	public function executePayment( $paymentId, $payerId ) {
+	public function executePayment( $paymentId, $token, $payerId ) {
 
 		$apiContext 		= $this->getApiContext();
 		$payment 			= Payment::get( $paymentId, $apiContext );
 		$paymentExecution 	= new PaymentExecution();
 		
 		$paymentExecution->setPayerId( $payerId );
-		
-		$payment = $payment->execute( $paymentExecution, $apiContext );
 
-		return $payment;
+		try {
+
+			// Execute Payment
+			$payment->execute( $paymentExecution, $apiContext );
+
+			// Get Payment			
+			$payment = Payment::get( $paymentId, $apiContext );
+
+			return $payment;
+		}
+		catch( Exception $ex ) {
+
+		}
+
+		return null;
+	}
+	
+	function getSaleId( $payment ) {
+
+		$transactions 	= $payment->getTransactions();
+
+		$transaction	= $transactions[0];
+
+		$resources 		= $transaction->getRelatedResources();
+		$sale			= $resources[0]->getSale();
+		$saleId 		= $sale->getId();
+
+		/*
+		$tran_amount	= $transaction->getAmount();
+		$tran_total		= $tran_amount->getTotal();
+		$tran_currency	= $tran_amount->getCurrency();
+		*/
+
+		return $saleId;
 	}
 
 	function getPayment( $paymentId ) {
@@ -265,7 +306,7 @@ class PaypalRestUtil {
 
 		$sale 			= Sale::get( $saleId, $apiContext );
 
-		$completed		= strcmp( $sale->getState(), "completed") == 0;
+		$completed		= strcmp( $sale->getState(), 'completed' ) == 0;
 
 		return $completed;
 	}
@@ -319,11 +360,11 @@ class PaypalRestUtil {
 
 		$apiContext = null;
 
-		if( strcmp( $this->properties->getStatus(), "sandbox" ) == 0 ) {
+		if( strcmp( $this->properties->getStatus(), 'sandbox' ) == 0 ) {
 
 			$apiContext = new ApiContext( new OAuthTokenCredential( $this->properties->getSandboxClientId(),  $this->properties->getSandboxSecret() ) );
 		}
-		else if( strcmp( $this->properties->getStatus(), "live" ) == 0 ) {
+		else if( strcmp( $this->properties->getStatus(), 'live' ) == 0 ) {
 
 			$apiContext = new ApiContext( new OAuthTokenCredential( $this->properties->getLiveClientId(),  $this->properties->getLiveSecret() ) );
 		}
@@ -333,8 +374,8 @@ class PaypalRestUtil {
 			'http.Retry' => 1,
 			'mode' => $this->properties->getStatus(),
 			'log.LogEnabled' => true,
-			'log.FileName' => Yii::getAlias( "@frontend" ) . '/runtime/paypal.log',
-			'log.LogLevel' => 'INFO'		
+			'log.FileName' => Yii::getAlias( '@frontend' ) . '/runtime/paypal.log',
+			'log.LogLevel' => 'INFO'
 		]);
 
 		return $apiContext;
