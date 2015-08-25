@@ -1,19 +1,18 @@
 <?php
-namespace common\config;
+namespace cmsgears\paypal\rest\common\config;
 
 // Yii Imports
 use \Yii;
 
-// CA Imports
-use common\config\CoreGlobal;
+// CMG Imports
+use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
-use common\services\core\ConfigService;
-
-class PaypalRestProperties {
+class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
 	const PROP_STATUS			= "status";
 	const PROP_PAYMENT_ENABLED	= "payment enabled";
 	const PROP_CURRENCY			= "currency";
+	const PROP_SEND_ADDRESS		= "send address";
 
 	const PROP_SB_CLIENT_ID		= "sb client id";
 	const PROP_SB_SECRET		= "sb secret";
@@ -21,34 +20,34 @@ class PaypalRestProperties {
 	const PROP_LIVE_CLIENT_ID	= "live client id";
 	const PROP_LIVE_SECRET		= "live secret";
 
-	private $properties;
-
 	// Singleton instance
 	private static $instance;
 
 	// Constructor and Initialisation ------------------------------
 
- 	private function __construct() {
+	private function __construct() {
 
+		// init code
 	}
 
+	/**
+	 * Return Singleton instance.
+	 */
 	public static function getInstance() {
 
 		if( !isset( self::$instance ) ) {
 
 			self::$instance	= new PaypalRestProperties();
 
-			self::$instance->init();
+			self::$instance->init( PaypalRestGlobal::CONFIG_PAYPAL_REST );
 		}
 
 		return self::$instance;
 	}
 
-	public function init() {
-
-		$this->properties	= ConfigService::getNameValueMapByType( CoreGlobal::CONFIG_TYPE_PAYPAL_REST );
-	}
-
+	/**
+	 * Return rest property for the specified key.
+	 */
 	public function getProperty( $key ) {
 
 		return $this->properties[ key ];
@@ -74,6 +73,13 @@ class PaypalRestProperties {
 	public function getCurrency() {
 
 		return $this->properties[ self::PROP_CURRENCY ];
+	}
+
+	public function isSendAddress() {
+
+		$sendAddress = $this->properties[ self::PROP_SEND_ADDRESS ];
+
+		return $sendAddress;
 	}
 
 	public function getSandboxClientId() {
