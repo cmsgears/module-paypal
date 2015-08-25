@@ -1,16 +1,12 @@
 {
 	"name": "cmsgears/module-paypal-rest",
-	"description": "The Paypal REST Module required for the projects which need Paypal REST for accepting payments.",
+	"description": "The Paypal REST Module required for the projects which need Paypal REST to accept payments.",
 	"homepage": "http://www.cmsgears.org", 
 	"type": "package",
 	"keywords": [ "yii2", "cmsgears", "module", "paypal", "paypal rest" ],
 	"license": "GPLv3",
 	"support": {
-        "source": "http://www.cmsgears.org/downloads/plugins/paypal/rest",
-		"forum": "http://forum.cmsgears.org/",
-		"resources": "http://resources.cmsgears.org/",
-		"issues": "https://www.amazingdesk.com/cmsgears/issues/",
-		"blog": "http://cmsgears.tutorials24x7.com/"
+		"resources": "http://www.cmsgears.org"
 	},
 	"autoload": {
 		"psr-4": {
