@@ -1,5 +1,7 @@
 /* ========================== CMSGears PayPal REST ========================================== */
 
+SELECT @site := `id` FROM cmg_core_site WHERE slug = 'main';
+
 --
 -- REST Config Form
 --
