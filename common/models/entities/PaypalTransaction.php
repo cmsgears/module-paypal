@@ -7,7 +7,7 @@ use \Yii;
 // CMG Imports
 use cmsgears\core\common\config\CoreGlobal;
 
-use cmsgears\core\common\models\entities\CmgEntity;
+use cmsgears\core\common\models\base\CmgEntity;
 
 /**
  * PaypalTransaction Entity - The primary class.
