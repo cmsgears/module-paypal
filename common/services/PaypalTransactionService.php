@@ -13,7 +13,7 @@ use cmsgears\paypal\rest\common\models\entities\PaypalTransaction;
 
 use cmsgears\core\common\utilities\DateUtil;
 
-class PaypalTransactionService extends \cmsgears\core\common\services\base\Service {
+class PaypalTransactionService extends \cmsgears\payment\common\services\PaymentService {
 
 	// Static Methods ----------------------------------------------
 
@@ -84,6 +84,14 @@ class PaypalTransactionService extends \cmsgears\core\common\services\base\Servi
 	}
 
 	// Update -----------
+
+	public static function updateData( $payment, $paymentId, $token, $payerId ) {
+
+        $payment->setDataAttribute( 'paymentId', $paymentId );
+        $payment->setDataAttribute( 'token', $token );
+        $payment->setDataAttribute( 'payerId', $payerId );
+        $payment->update();
+    }
 
 }
 
