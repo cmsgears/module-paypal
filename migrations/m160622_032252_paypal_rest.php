@@ -19,8 +19,8 @@ class m160622_032252_paypal_rest extends \yii\db\Migration {
 		$this->prefix		= 'cmg_';
 
 		// Get the values via config
-		$this->fk			= Yii::$app->cmgMigration->isFk();
-		$this->options		= Yii::$app->cmgMigration->getTableOptions();
+		$this->fk			= Yii::$app->migration->isFk();
+		$this->options		= Yii::$app->migration->getTableOptions();
 
 		// Default collation
 		if( $this->db->driverName === 'mysql' ) {
