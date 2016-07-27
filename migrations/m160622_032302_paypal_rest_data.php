@@ -85,7 +85,7 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 			[ $this->site->id, 'live secret','Live Secret', 'paypal-rest','text', null ]
 		];
 
-		$this->batchInsert( $this->prefix . 'core_site_attribute', $columns, $attributes );
+		$this->batchInsert( $this->prefix . 'core_site_meta', $columns, $attributes );
 	}
 
     public function down() {
