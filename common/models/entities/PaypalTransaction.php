@@ -7,45 +7,86 @@ use \Yii;
 // CMG Imports
 use cmsgears\core\common\config\CoreGlobal;
 
-use cmsgears\core\common\models\base\CmgEntity;
-
 /**
  * PaypalTransaction Entity - The primary class.
  *
  * @property integer $id
  * @property integer $createdBy
+ * @property integer $modifiedBy
  * @property integer $parentId
  * @property string $parentType
+ * @property string $title
+ * @property string $description
+ * @property string $type
+ * @property string $mode
  * @property string $code
- * @property string $intent
+ * @property string $service
+ * @property integer $amount
+ * @property integer $currency
  * @property datetime $createdAt
+ * @property datetime $modifiedAt
+ * @property string $content
+ * @property string $data
  */
-class PaypalTransaction extends CmgEntity {
+class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transaction {
 
-	// Instance methods --------------------------------------------------
+	// Variables ---------------------------------------------------
 
-	// yii\base\Model --------------------
+	// Globals -------------------------------
+
+	// Constants --------------
+
+	// Public -----------------
+
+	// Protected --------------
+
+	// Variables -----------------------------
+
+	// Public -----------------
+
+	// Protected --------------
+
+	// Private ----------------
+
+	// Traits ------------------------------------------------------
+
+	// Constructor and Initialisation ------------------------------
+
+	// Instance methods --------------------------------------------
+
+	// Yii interfaces ------------------------
+
+	// Yii parent classes --------------------
+
+	// yii\base\Component -----
+
+	// yii\base\Model ---------
+
+	// CMG interfaces ------------------------
+
+	// CMG parent classes --------------------
+
+	// Validators ----------------------------
+
+	// PaypalTransaction ---------------------
 
 	// Static Methods ----------------------------------------------
 
-	// yii\db\ActiveRecord ---------------
+	// Yii parent classes --------------------
 
-	public static function tableName() {
+	// yii\db\ActiveRecord ----
 
-		return PayPalRestTables::TABLE_REST_TRANSACTION;
-	}
+	// CMG parent classes --------------------
 
-	// PaypalTransaction -----------------
+	// PaypalTransaction ---------------------
 
-	public static function findByCode( $code ) {
+	// Read - Query -----------
 
-		return self::find()->where( 'code=:code', [ ':code' => $code ] )->one();
-	}
+	// Read - Find ------------
 
-	public static function findByParentIdParentType( $parentId, $parentType ) {
+	// Create -----------------
 
-		return self::find()->where( 'parentId=:id AND parentType=:type', [ ':id' => $parentId, ':type' => $parentType ] )->orderBy( 'id DESC' )->one();
-	}
+	// Update -----------------
+
+	// Delete -----------------
 }
-
-?>

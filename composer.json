@@ -1,7 +1,7 @@
 {
 	"name": "cmsgears/module-paypal-rest",
 	"description": "The Paypal REST Module required for the projects which need Paypal REST to accept payments.",
-	"homepage": "http://www.cmsgears.org", 
+	"homepage": "http://www.cmsgears.org",
 	"type": "package",
 	"keywords": [ "yii2", "cmsgears", "module", "paypal", "paypal rest" ],
 	"license": "GPLv3",
@@ -19,6 +19,6 @@
         "cmsgears/module-cart": "*",
 		"ext-curl": "*",
     	"ext-json": "*",
-    	"paypal/rest-api-sdk-php":"*"
+    	"paypal/rest-api-sdk-php":"1.7.*"
     }
 }
