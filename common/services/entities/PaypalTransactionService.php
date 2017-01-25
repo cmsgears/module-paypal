@@ -8,16 +8,16 @@ use \Yii;
 use cmsgears\core\common\config\CoreGlobal;
 use cmsgears\cart\common\config\CartGlobal;
 
-use cmsgears\paypal\rest\common\models\entities\PayPalRestTables; 
+use cmsgears\paypal\rest\common\models\entities\PayPalRestTables;
 use cmsgears\paypal\rest\common\models\entities\PaypalTransaction;
 
 use cmsgears\core\common\utilities\DateUtil;
 
-class PaypalTransactionService extends \cmsgears\core\common\services\Service {
+class PaypalTransactionService extends \cmsgears\payment\common\services\PaymentService {
 
 	// Static Methods ----------------------------------------------
-	 
-	// Read ---------------- 
+
+	// Read ----------------
 
 	public static function findById( $id ) {
 
@@ -53,8 +53,8 @@ class PaypalTransactionService extends \cmsgears\core\common\services\Service {
 	public static function create( $parentId, $parentType, $transaction ) {
 
 		// Set Attributes
-		$user						= Yii::$app->user->getIdentity();
-		
+		$user						= Yii::$app->cmgCore->getAppUser();
+
 		$transaction				= new PaypalTransaction();
 		$transaction->createdBy		= $user->id;
 		$transaction->status		= Order::STATUS_NEW;
@@ -68,7 +68,7 @@ class PaypalTransactionService extends \cmsgears\core\common\services\Service {
 	public static function createForOrderId( $orderId, $payment ) {
 
 		// Set Attributes
-		$user				= Yii::$app->user->getIdentity();
+		$user				= Yii::$app->cmgCore->getAppUser();
 		$txn				= new PaypalTransaction();
 
 		$txn->createdBy		= $user->id;
@@ -83,7 +83,15 @@ class PaypalTransactionService extends \cmsgears\core\common\services\Service {
 		return $txn;
 	}
 
-	// Update ----------- 
+	// Update -----------
+
+	public static function updateData( $payment, $paymentId, $token, $payerId ) {
+
+        $payment->setDataAttribute( 'paymentId', $paymentId );
+        $payment->setDataAttribute( 'token', $token );
+        $payment->setDataAttribute( 'payerId', $payerId );
+        $payment->update();
+    }
 
 }
 
