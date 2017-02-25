@@ -15,8 +15,8 @@ class m160622_032252_paypal_rest extends \yii\db\Migration {
 
 	public function init() {
 
-		// Fixed
-		$this->prefix		= 'cmg_';
+		// Table prefix
+		$this->prefix		= Yii::$app->migration->cmgPrefix;
 
 		// Get the values via config
 		$this->fk			= Yii::$app->migration->isFk();
@@ -37,5 +37,3 @@ class m160622_032252_paypal_rest extends \yii\db\Migration {
 
     }
 }
-
-?>
