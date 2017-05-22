@@ -1,16 +1,13 @@
 <?php
 namespace cmsgears\paypal\rest\common\config;
 
-// Yii Imports
-use \Yii;
-
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
 class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
 	const PROP_STATUS			= "status";
-	const PROP_PAYMENT_ENABLED	= "payment enabled";
+	const PROP_PAYMENT_ENABLED	= "payments";
 	const PROP_CURRENCY			= "currency";
 	const PROP_SEND_ADDRESS		= "send address";
 
@@ -107,5 +104,3 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 		return $this->isActive() && $this->isPaymentEnabled();
 	}
 }
-
-?>

@@ -100,5 +100,3 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
         return true;
     }
 }
-
-?>

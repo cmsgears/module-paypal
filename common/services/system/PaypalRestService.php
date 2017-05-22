@@ -1,33 +1,31 @@
 <?php
-namespace cmsgears\paypal\rest\common\services;
+namespace cmsgears\paypal\rest\common\services\system;
 
 // Yii Imports
 use \Yii;
-use yii\helpers\Url;
 
 // Paypal Imports
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Api\PaymentExecution;
-use PayPal\Api\Details;
 use PayPal\Api\Amount;
-use PayPal\Api\CreditCard;
-use PayPal\Api\CreditCardToken;
-use PayPal\Api\FundingInstrument;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\Transaction;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Sale;
-use PayPal\Api\Refund;
+use PayPal\Api\Details;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Refund;
+use PayPal\Api\Sale;
 use PayPal\Api\ShippingAddress;
+use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestProperties;
 
-class PaypalRestService {
+use cmsgears\paypal\rest\common\services\interfaces\system\IPaypalRestService;
+
+class PaypalRestService implements IPaypalRestService {
 
 	private $properties;
 	private $successUrl;
@@ -36,7 +34,7 @@ class PaypalRestService {
 	public function __construct( $baseUrl = null ) {
 
 		$this->properties = PaypalRestProperties::getInstance();
-		
+
 		if( isset( $baseUrl ) ) {
 
 			$this->successUrl = $baseUrl . '/payment-success';
@@ -46,7 +44,7 @@ class PaypalRestService {
 
 	// Sample Payment ---------------------------------------
 
-    /*  
+    /*
         // Shipping Address
         $shipping_address   = new ShippingAddress();
         $shipping_address->setRecipientName("Test Receipient");
@@ -56,51 +54,51 @@ class PaypalRestService {
         $shipping_address->setState("Toronto");
         $shipping_address->setCountryCode("CA");
         $shipping_address->setPostalCode("M5A4E9");
-        
+
         // Items
         $items   = array();
-        
+
         $item   = new Item();
         $item->setName( "Test Item" );
         $item->setQuantity( 2 );
         $item->setCurrency( $currency );
-        $item->setPrice( 10.00 );        
+        $item->setPrice( 10.00 );
         $item->setSku(1);
-        
+
         $items[] = $item;
-        
+
         $item   = new Item();
         $item->setName( "Test Item" );
         $item->setQuantity( 2 );
         $item->setCurrency( $currency );
-        $item->setPrice( 10.00 );        
+        $item->setPrice( 10.00 );
         $item->setSku(1);
-                
+
         $items[] = $item;
-        
+
         $item_list = new ItemList();
-        
+
         $item_list->setItems($items);
         $item_list->setShippingAddress($shipping_address);
-        
+
         // Details
         $details = new Details();
         $details->setSubtotal( 40.00 );
         $details->setShipping( 5.00 );
         $details->setTax( 2.00 );
-         
+
         // Amount
         $amount = new Amount();
         $amount->setCurrency($currency);
         $amount->setTotal( 47.00 );
         $amount->setDetails($details);
-    */ 
+    */
 
 	// PaypalRestService ------------------------------------
 
 	function isPaymentActive() {
 
-		return $this->properties->isPaymentActive();		
+		return $this->properties->isPaymentActive();
 	}
 
 	function generateShippingAddress( $addressee, $address ) {
@@ -130,11 +128,11 @@ class PaypalRestService {
 	        $item->setName( $orderItem->name );
 	        $item->setQuantity( $orderItem->quantity );
 	        $item->setCurrency( $currency );
-	        $item->setPrice( $orderItem->price );   
-			
+	        $item->setPrice( $orderItem->price );
+
 			if( isset( $orderItem->sku ) ) {
-				
-				$item->setSku( $orderItem->sku );	
+
+				$item->setSku( $orderItem->sku );
 			}
 
 	        $items[] = $item;
@@ -188,7 +186,7 @@ class PaypalRestService {
 		// Transaction
 		$transaction = new Transaction();
 		$transaction->setAmount( $amount );
-		
+
 		if( isset( $order->description ) ) {
 
 			$transaction->setDescription( $order->description );
@@ -218,7 +216,7 @@ class PaypalRestService {
 		$apiContext 		= $this->getApiContext();
 		$payment 			= Payment::get( $paymentId, $apiContext );
 		$paymentExecution 	= new PaymentExecution();
-		
+
 		$paymentExecution->setPayerId( $payerId );
 
 		try {
@@ -226,7 +224,7 @@ class PaypalRestService {
 			// Execute Payment
 			$payment->execute( $paymentExecution, $apiContext );
 
-			// Get Payment			
+			// Get Payment
 			$payment = Payment::get( $paymentId, $apiContext );
 
 			return $payment;
@@ -237,7 +235,7 @@ class PaypalRestService {
 
 		return null;
 	}
-	
+
 	function getSaleId( $payment ) {
 
 		$transactions 	= $payment->getTransactions();
@@ -258,24 +256,24 @@ class PaypalRestService {
 	}
 
 	function getPayment( $paymentId ) {
-		
+
 		$apiContext 	= $this->getApiContext();
-		
+
 		$payment 		= Payment::get( $paymentId, $apiContext );
-		
+
 		return $payment;
 	}
-	
+
 	function refundPayment( $saleId, $amount, $currency ) {
-		
+
 		$amount	 		= number_format( $amount, 2 );
-		
+
 		$apiContext 	= $this->getApiContext();
-		
+
 		$sale 			= Sale::get( $saleId, $apiContext );
-		
+
 		$refund 		= new Refund();
-		
+
 		if( isset($amount) && strlen($amount) > 0 ) {
 
 			$amt = new Amount();
@@ -326,7 +324,7 @@ class PaypalRestService {
 
 	function parseApiError($errorJson) {
 
-		$msg 	= '';		
+		$msg 	= '';
 		$data 	= json_decode($errorJson, true);
 
 		if( isset( $data['name'] ) && isset( $data['message'] ) ) {
@@ -340,7 +338,7 @@ class PaypalRestService {
 
 			foreach( $data['details'] as $detail ) {
 
-				$msg .= "<li>" . $detail['field'] . " : " . $detail['issue'] . "</li>";	
+				$msg .= "<li>" . $detail['field'] . " : " . $detail['issue'] . "</li>";
 			}
 
 			$msg .= "</ul>";
@@ -381,5 +379,3 @@ class PaypalRestService {
 		return $apiContext;
 	}
 }
-
-?>

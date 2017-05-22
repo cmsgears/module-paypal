@@ -1,19 +1,19 @@
 <?php
-namespace cmsgears\paypal\rest\common\services;
+namespace cmsgears\paypal\rest\common\services\entities;
 
 // Yii Imports
 use \Yii;
 
 // CMG Imports
-use cmsgears\core\common\config\CoreGlobal;
 use cmsgears\cart\common\config\CartGlobal;
 
-use cmsgears\paypal\rest\common\models\entities\PayPalRestTables;
 use cmsgears\paypal\rest\common\models\entities\PaypalTransaction;
+
+use cmsgears\paypal\rest\common\services\interfaces\entities\IPaypalTransactionService;
 
 use cmsgears\core\common\utilities\DateUtil;
 
-class PaypalTransactionService extends \cmsgears\payment\common\services\PaymentService {
+class PaypalTransactionService extends \cmsgears\payment\common\services\entities\TransactionService implements IPaypalTransactionService {
 
 	// Static Methods ----------------------------------------------
 
@@ -50,21 +50,6 @@ class PaypalTransactionService extends \cmsgears\payment\common\services\Payment
 
 	// Create -----------
 
-	public static function create( $parentId, $parentType, $transaction ) {
-
-		// Set Attributes
-		$user						= Yii::$app->cmgCore->getAppUser();
-
-		$transaction				= new PaypalTransaction();
-		$transaction->createdBy		= $user->id;
-		$transaction->status		= Order::STATUS_NEW;
-
-		$cart->save();
-
-		// Return Cart
-		return $cart;
-	}
-
 	public static function createForOrderId( $orderId, $payment ) {
 
 		// Set Attributes
@@ -87,12 +72,11 @@ class PaypalTransactionService extends \cmsgears\payment\common\services\Payment
 
 	public static function updateData( $payment, $paymentId, $token, $payerId ) {
 
-        $payment->setDataAttribute( 'paymentId', $paymentId );
-        $payment->setDataAttribute( 'token', $token );
-        $payment->setDataAttribute( 'payerId', $payerId );
-        $payment->update();
+		$payment->setDataMeta( 'paymentId', $paymentId );
+		$payment->setDataMeta( 'token', $token );
+		$payment->setDataMeta( 'payerId', $payerId );
+
+		$payment->update();
     }
 
 }
-
-?>
