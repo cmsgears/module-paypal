@@ -6,21 +6,41 @@ use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
 class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
+	// Variables ---------------------------------------------------
+
+	// Global -----------------
+
 	const PROP_STATUS			= 'status';
 	const PROP_PAYMENTS			= 'payments';
 	const PROP_CURRENCY			= 'currency';
-	const PROP_SEND_ADDRESS		= 'send address';
+	const PROP_SEND_ADDRESS		= 'address';
 
-	const PROP_SB_CLIENT_ID		= 'sb client id';
-	const PROP_SB_SECRET		= 'sb secret';
+	const PROP_SB_CLIENT_ID		= 'sb_client_id';
+	const PROP_SB_SECRET		= 'sb_secret';
 
-	const PROP_LIVE_CLIENT_ID	= 'live client id';
-	const PROP_LIVE_SECRET		= 'live secret';
+	const PROP_LIVE_CLIENT_ID	= 'live_client_id';
+	const PROP_LIVE_SECRET		= 'live_secret';
+
+	// Public -----------------
+
+	// Protected --------------
+
+	// Private ----------------
 
 	// Singleton instance
 	private static $instance;
 
 	// Constructor and Initialisation ------------------------------
+
+	// Instance methods --------------------------------------------
+
+	// Yii parent classes --------------------
+
+	// CMG parent classes --------------------
+
+	// PaypalRestProperties ------------------
+
+	// Singleton
 
 	public static function getInstance() {
 
@@ -33,6 +53,8 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
 		return self::$instance;
 	}
+
+	// Properties
 
 	public function getStatus() {
 

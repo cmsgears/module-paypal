@@ -1,6 +1,4 @@
 <?php
-// CMG Imports
-use cmsgears\core\common\config\CoreGlobal;
 
 class m160622_032252_paypal_rest extends \yii\db\Migration {
 
