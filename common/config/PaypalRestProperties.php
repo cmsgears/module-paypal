@@ -63,7 +63,7 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
 	public function isPayments() {
 
-		return $this->properties[ self::PROP_PAYMENT_ENABLED ];
+		return $this->properties[ self::PROP_PAYMENTS ];
 	}
 
 	public function isActive() {
