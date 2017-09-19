@@ -63,8 +63,8 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 	public function setBaseUrl( $baseUrl, $params ) {
 
-		$this->successUrl	= "$baseUrl/payment-success?$params";
-		$this->failureUrl	= "$baseUrl/payment-failed?$params";
+		$this->successUrl	= "$baseUrl/payment/success?$params";
+		$this->failureUrl	= "$baseUrl/payment/failed?$params";
 	}
 
 	// Instance methods --------------------------------------------
