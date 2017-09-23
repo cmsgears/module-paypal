@@ -240,11 +240,16 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 			return $payment;
 		}
+      	catch( \PayPal\Exception\PayPalConnectionException $ex ) {
+
+          	return false;
+        }
 		catch( Exception $ex ) {
 
+          	return false;
 		}
 
-		return null;
+		return true;
 	}
 
 	public function refundPayment( $saleId, $amount, $currency ) {
