@@ -252,6 +252,21 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 		return true;
 	}
 
+	public function reversePayment( $order ) {
+
+		$transaction	= $order->getTransaction()->one();
+		$data			= json_decode( $transaction->data );
+		$paymentId		= $data->paymentId;
+		$payment		= $this->getPayment( $paymentId );
+		$saleId			= $this->getSaleId( $payment );
+		$amount			= $transaction->amount;
+		$currency		= $transaction->currency;
+		
+		return  $this->refundPayment( $saleId, $amount, $currency);
+		
+	}
+	
+
 	public function refundPayment( $saleId, $amount, $currency ) {
 
 		$amount	 	= number_format( $amount, 2 );
