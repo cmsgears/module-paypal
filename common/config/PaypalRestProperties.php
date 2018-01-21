@@ -1,38 +1,47 @@
 <?php
 namespace cmsgears\paypal\rest\common\config;
 
-// Yii Imports
-use \Yii;
-
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
 class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
-	const PROP_STATUS			= "status";
-	const PROP_PAYMENT_ENABLED	= "payment enabled";
-	const PROP_CURRENCY			= "currency";
-	const PROP_SEND_ADDRESS		= "send address";
+	// Variables ---------------------------------------------------
 
-	const PROP_SB_CLIENT_ID		= "sb client id";
-	const PROP_SB_SECRET		= "sb secret";
+	// Global -----------------
 
-	const PROP_LIVE_CLIENT_ID	= "live client id";
-	const PROP_LIVE_SECRET		= "live secret";
+	const PROP_STATUS			= 'status';
+	const PROP_PAYMENTS			= 'payments';
+	const PROP_CURRENCY			= 'currency';
+	const PROP_SEND_ADDRESS		= 'address';
+
+	const PROP_SB_CLIENT_ID		= 'sb_client_id';
+	const PROP_SB_SECRET		= 'sb_secret';
+
+	const PROP_LIVE_CLIENT_ID	= 'live_client_id';
+	const PROP_LIVE_SECRET		= 'live_secret';
+
+	// Public -----------------
+
+	// Protected --------------
+
+	// Private ----------------
 
 	// Singleton instance
 	private static $instance;
 
 	// Constructor and Initialisation ------------------------------
 
-	private function __construct() {
+	// Instance methods --------------------------------------------
 
-		// init code
-	}
+	// Yii parent classes --------------------
 
-	/**
-	 * Return Singleton instance.
-	 */
+	// CMG parent classes --------------------
+
+	// PaypalRestProperties ------------------
+
+	// Singleton
+
 	public static function getInstance() {
 
 		if( !isset( self::$instance ) ) {
@@ -45,22 +54,16 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 		return self::$instance;
 	}
 
-	/**
-	 * Return rest property for the specified key.
-	 */
-	public function getProperty( $key ) {
-
-		return $this->properties[ key ];
-	}
+	// Properties
 
 	public function getStatus() {
 
 		return $this->properties[ self::PROP_STATUS ];
 	}
 
-	public function isPaymentEnabled() {
+	public function isPayments() {
 
-		return $this->properties[ self::PROP_PAYMENT_ENABLED ];
+		return $this->properties[ self::PROP_PAYMENTS ];
 	}
 
 	public function isActive() {
@@ -107,5 +110,3 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 		return $this->isActive() && $this->isPaymentEnabled();
 	}
 }
-
-?>

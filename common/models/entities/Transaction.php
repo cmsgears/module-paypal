@@ -1,16 +1,11 @@
 <?php
 namespace cmsgears\paypal\rest\common\models\entities;
 
-// Yii Imports
-use \Yii;
-
-// CMG Imports
-use cmsgears\core\common\config\CoreGlobal;
-
 /**
- * PaypalTransaction Entity - The primary class.
+ * Transaction Entity - The primary class.
  *
  * @property integer $id
+ * @property integer $orderId
  * @property integer $createdBy
  * @property integer $modifiedBy
  * @property integer $parentId
@@ -22,19 +17,23 @@ use cmsgears\core\common\config\CoreGlobal;
  * @property string $code
  * @property string $service
  * @property integer $amount
- * @property integer $currency
+ * @property string $currency
+ * @property string $link
  * @property datetime $createdAt
  * @property datetime $modifiedAt
+ * @property date $processedAt
  * @property string $content
  * @property string $data
  */
-class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transaction {
+class Transaction extends \cmsgears\cart\common\models\entities\Transaction {
 
 	// Variables ---------------------------------------------------
 
 	// Globals -------------------------------
 
 	// Constants --------------
+
+	const SERVICE_PAYPAL_REST	= 'paypal-rest';
 
 	// Public -----------------
 
@@ -52,6 +51,13 @@ class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transac
 
 	// Constructor and Initialisation ------------------------------
 
+	public function init() {
+
+		parent::init();
+
+		$this->service	= self::SERVICE_PAYPAL_REST;
+	}
+
 	// Instance methods --------------------------------------------
 
 	// Yii interfaces ------------------------
@@ -68,7 +74,7 @@ class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transac
 
 	// Validators ----------------------------
 
-	// PaypalTransaction ---------------------
+	// Transaction ---------------------------
 
 	// Static Methods ----------------------------------------------
 
@@ -78,7 +84,7 @@ class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transac
 
 	// CMG parent classes --------------------
 
-	// PaypalTransaction ---------------------
+	// Transaction ---------------------------
 
 	// Read - Query -----------
 
@@ -89,4 +95,5 @@ class PaypalTransaction extends \cmsgears\payment\common\models\entities\Transac
 	// Update -----------------
 
 	// Delete -----------------
+
 }

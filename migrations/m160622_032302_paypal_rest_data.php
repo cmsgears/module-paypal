@@ -11,7 +11,11 @@ use cmsgears\core\common\utilities\DateUtil;
 
 class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 
-	public $prefix;
+	// Public Variables
+
+	// Private Variables
+
+	private $prefix;
 
 	private $site;
 
@@ -19,10 +23,11 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 
 	public function init() {
 
-		$this->prefix		= 'cmg_';
+		// Table prefix
+		$this->prefix	= Yii::$app->migration->cmgPrefix;
 
 		$this->site		= Site::findBySlug( CoreGlobal::SITE_MAIN );
-		$this->master	= User::findByUsername( 'demomaster' );
+		$this->master	= User::findByUsername( Yii::$app->migration->getSiteMaster() );
 
 		Yii::$app->core->setSite( $this->site );
 	}
@@ -57,14 +62,14 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 		$columns = [ 'formId', 'name', 'label', 'type', 'compress', 'validators', 'order', 'icon', 'htmlOptions' ];
 
 		$fields	= [
-			[ $config->id, 'status', 'Status', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{\"title\":\"Status\",\"items\":[\"sandbox\",\"live\"]}' ],
-			[ $config->id, 'payments', 'Payments', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{\"title\":\"Payments Enabled\"}' ],
-			[ $config->id, 'currency', 'Currency', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{\"title\":\"Currency\",\"items\":[\"USD\",\"CAD\"]}' ],
-			[ $config->id, 'address', 'Address', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{\"title\":\"Address Verification\"}' ],
-			[ $config->id, 'sb_client_id', 'Sandbox Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{\"title\":\"Sandbox Client ID\",\"placeholder\":\"Sandbox Client ID\"}' ],
-			[ $config->id, 'sb_secret', 'Sandbox Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{\"title\":\"Sandbox Secret\",\"placeholder\":\"Sandbox Secret\"}' ],
-			[ $config->id, 'live_client_id', 'Live Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{\"title\":\"Live Client ID\",\"placeholder\":\"Live Client ID\"}' ],
-			[ $config->id, 'live_secret', 'Live Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{\"title\":\"Live Secret\",\"placeholder\":\"Live Secret\"}' ]
+			[ $config->id, 'status', 'Status', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{"title":"Status","items":{"sandbox":"Sandbox","live":"Live"}}' ],
+			[ $config->id, 'payments', 'Payments', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{"title":"Payments Enabled"}' ],
+			[ $config->id, 'currency', 'Currency', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{"title":"Currency","items":{"USD":"USD","CAD":"CAD"}}' ],
+			[ $config->id, 'address', 'Address', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{"title":"Address Verification"}' ],
+			[ $config->id, 'sb_client_id', 'Sandbox Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{"title":"Sandbox Client ID","placeholder":"Sandbox Client ID"}' ],
+			[ $config->id, 'sb_secret', 'Sandbox Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{"title":"Sandbox Secret","placeholder":"Sandbox Secret"}' ],
+			[ $config->id, 'live_client_id', 'Live Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{"title":"Live Client ID","placeholder":"Live Client ID"}' ],
+			[ $config->id, 'live_secret', 'Live Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{"title":"Live Secret","placeholder":"Live Secret"}' ]
 		];
 
 		$this->batchInsert( $this->prefix . 'core_form_field', $columns, $fields );
@@ -79,10 +84,10 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 			[ $this->site->id, 'payments', 'Payments', 'paypal-rest','flag', '0' ],
 			[ $this->site->id, 'currency','Currency', 'paypal-rest','text', 'USD' ],
 			[ $this->site->id, 'address','Address', 'paypal-rest','flag', '0' ],
-			[ $this->site->id, 'sb client id','Sandbox Client ID', 'paypal-rest','text', null ],
-			[ $this->site->id, 'sb secret','Sandbox Secret', 'paypal-rest','text', null ],
-			[ $this->site->id, 'live client id','Live Client ID', 'paypal-rest','text', null ],
-			[ $this->site->id, 'live secret','Live Secret', 'paypal-rest','text', null ]
+			[ $this->site->id, 'sb_client_id','Sandbox Client ID', 'paypal-rest','text', null ],
+			[ $this->site->id, 'sb_secret','Sandbox Secret', 'paypal-rest','text', null ],
+			[ $this->site->id, 'live_client_id','Live Client ID', 'paypal-rest','text', null ],
+			[ $this->site->id, 'live_secret','Live Secret', 'paypal-rest','text', null ]
 		];
 
 		$this->batchInsert( $this->prefix . 'core_site_meta', $columns, $attributes );
@@ -95,5 +100,3 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
         return true;
     }
 }
-
-?>
