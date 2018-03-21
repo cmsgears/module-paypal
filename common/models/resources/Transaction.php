@@ -1,31 +1,21 @@
 <?php
-namespace cmsgears\paypal\rest\common\models\entities;
+/**
+ * This file is part of CMSGears Framework. Please view License file distributed
+ * with the source code for license details.
+ *
+ * @link https://www.cmsgears.org/
+ * @copyright Copyright (c) 2015 VulpineCode Technologies Pvt. Ltd.
+ */
+
+namespace cmsgears\paypal\rest\common\models\resources;
+
+// CMG Imports
+use cmsgears\cart\common\models\resources\Transaction as BaseTransaction;
 
 /**
- * Transaction Entity - The primary class.
- *
- * @property integer $id
- * @property integer $orderId
- * @property integer $createdBy
- * @property integer $modifiedBy
- * @property integer $parentId
- * @property string $parentType
- * @property string $title
- * @property string $description
- * @property string $type
- * @property string $mode
- * @property string $code
- * @property string $service
- * @property integer $amount
- * @property string $currency
- * @property string $link
- * @property datetime $createdAt
- * @property datetime $modifiedAt
- * @property date $processedAt
- * @property string $content
- * @property string $data
+ * @inheritdoc
  */
-class Transaction extends \cmsgears\cart\common\models\entities\Transaction {
+class Transaction extends BaseTransaction {
 
 	// Variables ---------------------------------------------------
 
@@ -51,6 +41,9 @@ class Transaction extends \cmsgears\cart\common\models\entities\Transaction {
 
 	// Constructor and Initialisation ------------------------------
 
+	/**
+	 * @inheritdoc
+	 */
 	public function init() {
 
 		parent::init();

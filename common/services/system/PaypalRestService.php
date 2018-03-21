@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of CMSGears Framework. Please view License file distributed
+ * with the source code for license details.
+ *
+ * @link https://www.cmsgears.org/
+ * @copyright Copyright (c) 2015 VulpineCode Technologies Pvt. Ltd.
+ */
+
 namespace cmsgears\paypal\rest\common\services\system;
 
 // Yii Imports
@@ -25,19 +33,18 @@ use cmsgears\paypal\rest\common\config\PaypalRestProperties;
 
 use cmsgears\paypal\rest\common\services\interfaces\system\IPaypalRestService;
 
-class PaypalRestService extends \yii\base\Component implements IPaypalRestService {
+use cmsgears\core\common\services\base\SystemService;
+
+/**
+ * PaypalRestService provide methods specific to PayPal REST APIs to handle transactions.
+ *
+ * @since 1.0.0
+ */
+class PaypalRestService extends SystemService implements IPaypalRestService {
 
 	// Variables ---------------------------------------------------
 
-	// Globals -------------------------------
-
-	// Constants --------------
-
-	// Public -----------------
-
-	// Protected --------------
-
-	// Variables -----------------------------
+	// Globals ----------------
 
 	// Public -----------------
 
@@ -69,21 +76,15 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 	// Instance methods --------------------------------------------
 
-	// Yii parent classes --------------------
+	// Yii interfaces ------------------------
 
-	// yii\base\Component -----
+	// Yii parent classes --------------------
 
 	// CMG interfaces ------------------------
 
 	// CMG parent classes --------------------
 
 	// PaypalRestService ---------------------
-
-	// Data Provider ------
-
-	// Read ---------------
-
-	// Read - Models ---
 
 	public function getPayment( $paymentId ) {
 
@@ -102,12 +103,6 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 		return $sale;
 	}
-
-	// Read - Lists ----
-
-	// Read - Maps -----
-
-	// Read - Others ---
 
 	public function getSaleId( $payment ) {
 
@@ -151,8 +146,6 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 		return "";
 	}
-
-	// Create -------------
 
 	public function createPayment( $order, $addressee = null ) {
 
@@ -220,8 +213,6 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 		return $payment;
 	}
 
-	// Update -------------
-
 	public function executePayment( $paymentId, $token, $payerId ) {
 
 		$apiContext 		= $this->getApiContext();
@@ -261,11 +252,11 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 		$saleId			= $this->getSaleId( $payment );
 		$amount			= $transaction->amount;
 		$currency		= $transaction->currency;
-		
+
 		return  $this->refundPayment( $saleId, $amount, $currency);
-		
+
 	}
-	
+
 
 	public function refundPayment( $saleId, $amount, $currency ) {
 
@@ -291,10 +282,6 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 		return $refund;
 	}
-
-	// Delete -------------
-
-	// Additional ---------
 
 	private function parseApiError( $errorJson ) {
 
@@ -400,27 +387,11 @@ class PaypalRestService extends \yii\base\Component implements IPaypalRestServic
 
 	// Static Methods ----------------------------------------------
 
+	// Yii parent classes --------------------
+
 	// CMG parent classes --------------------
 
 	// PaypalRestService ---------------------
-
-	// Data Provider ------
-
-	// Read ---------------
-
-	// Read - Models ---
-
-	// Read - Lists ----
-
-	// Read - Maps -----
-
-	// Read - Others ---
-
-	// Create -------------
-
-	// Update -------------
-
-	// Delete -------------
 
 }
 

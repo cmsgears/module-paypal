@@ -1,6 +1,16 @@
 <?php
+/**
+ * This file is part of CMSGears Framework. Please view License file distributed
+ * with the source code for license details.
+ *
+ * @link https://www.cmsgears.org/
+ * @copyright Copyright (c) 2015 VulpineCode Technologies Pvt. Ltd.
+ */
+
 // CMG Imports
 use cmsgears\core\common\config\CoreGlobal;
+
+use cmsgears\core\common\base\Migration;
 
 use cmsgears\core\common\models\entities\Site;
 use cmsgears\core\common\models\entities\User;
@@ -9,7 +19,7 @@ use cmsgears\core\common\models\resources\FormField;
 
 use cmsgears\core\common\utilities\DateUtil;
 
-class m160622_032302_paypal_rest_data extends \yii\db\Migration {
+class m160622_032302_paypal_rest_data extends Migration {
 
 	// Public Variables
 
@@ -26,6 +36,7 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 		// Table prefix
 		$this->prefix	= Yii::$app->migration->cmgPrefix;
 
+		// Site config
 		$this->site		= Site::findBySlug( CoreGlobal::SITE_MAIN );
 		$this->master	= User::findByUsername( Yii::$app->migration->getSiteMaster() );
 
@@ -57,7 +68,7 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
             'modifiedAt' => DateUtil::getDateTime()
         ]);
 
-		$config	= Form::findBySlug( 'config-paypal-rest', CoreGlobal::TYPE_SYSTEM );
+		$config	= Form::findBySlugType( 'config-paypal-rest', CoreGlobal::TYPE_SYSTEM );
 
 		$columns = [ 'formId', 'name', 'label', 'type', 'compress', 'validators', 'order', 'icon', 'htmlOptions' ];
 
@@ -99,4 +110,5 @@ class m160622_032302_paypal_rest_data extends \yii\db\Migration {
 
         return true;
     }
+
 }
