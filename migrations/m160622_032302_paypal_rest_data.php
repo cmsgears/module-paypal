@@ -19,6 +19,11 @@ use cmsgears\core\common\models\resources\FormField;
 
 use cmsgears\core\common\utilities\DateUtil;
 
+/**
+ * The paypal rest data migration inserts the base data required to run the application.
+ *
+ * @since 1.0.0
+ */
 class m160622_032302_paypal_rest_data extends Migration {
 
 	// Public Variables

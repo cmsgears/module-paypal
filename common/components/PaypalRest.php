@@ -37,7 +37,7 @@ class PaypalRest extends Component {
 
 		parent::init();
 
-		// Register application components and objects i.e. CMG and Project
+		// Register components and objects
 		$this->registerComponents();
 	}
 

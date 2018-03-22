@@ -15,12 +15,14 @@ use Yii;
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
+use cmsgears\core\common\base\Module as BaseModule;
+
 /**
  * The admin module configures controller namespace, views path and sidebar.
  *
  * @since 1.0.0
  */
-class Module extends \cmsgears\core\common\base\Module {
+class Module extends BaseModule {
 
 	// Variables ---------------------------------------------------
 
