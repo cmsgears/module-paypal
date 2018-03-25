@@ -14,10 +14,11 @@
 		}
 	},
     "require": {
-        "cmsgears/module-core": "*",
-        "cmsgears/module-cart": "*",
 		"ext-curl": "*",
     	"ext-json": "*",
-    	"paypal/rest-api-sdk-php":"1.7.*"
+    	"paypal/rest-api-sdk-php":"1.7.*",
+        "cmsgears/module-core": "*",
+		"cmsgears/module-payment": "*",
+        "cmsgears/module-cart": "*"
     }
 }
