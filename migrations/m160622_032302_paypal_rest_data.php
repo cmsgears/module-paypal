@@ -65,10 +65,10 @@ class m160622_032302_paypal_rest_data extends Migration {
             'name' => 'Config PayPal REST', 'slug' => 'config-paypal-rest',
             'type' => CoreGlobal::TYPE_SYSTEM,
             'description' => 'PayPal REST configuration form.',
-            'successMessage' => 'All configurations saved successfully.',
+            'success' => 'All configurations saved successfully.',
             'captcha' => false,
             'visibility' => Form::VISIBILITY_PROTECTED,
-            'active' => true, 'userMail' => false,'adminMail' => false,
+            'status' => Form::STATUS_ACTIVE, 'userMail' => false,'adminMail' => false,
             'createdAt' => DateUtil::getDateTime(),
             'modifiedAt' => DateUtil::getDateTime()
         ]);
@@ -93,17 +93,17 @@ class m160622_032302_paypal_rest_data extends Migration {
 
 	private function insertDefaultConfig() {
 
-		$columns = [ 'modelId', 'name', 'label', 'type', 'valueType', 'value' ];
+		$columns = [ 'modelId', 'name', 'label', 'type', 'active', 'valueType', 'value', 'data' ];
 
 		$attributes	= [
-			[ $this->site->id, 'status', 'Status', 'paypal-rest','text', null ],
-			[ $this->site->id, 'payments', 'Payments', 'paypal-rest','flag', '0' ],
-			[ $this->site->id, 'currency','Currency', 'paypal-rest','text', 'USD' ],
-			[ $this->site->id, 'address','Address', 'paypal-rest','flag', '0' ],
-			[ $this->site->id, 'sb_client_id','Sandbox Client ID', 'paypal-rest','text', null ],
-			[ $this->site->id, 'sb_secret','Sandbox Secret', 'paypal-rest','text', null ],
-			[ $this->site->id, 'live_client_id','Live Client ID', 'paypal-rest','text', null ],
-			[ $this->site->id, 'live_secret','Live Secret', 'paypal-rest','text', null ]
+			[ $this->site->id, 'status', 'Status', 'paypal-rest', 1, 'text', NULL, NULL ],
+			[ $this->site->id, 'payments', 'Payments', 'paypal-rest', 1, 'flag', '0', NULL ],
+			[ $this->site->id, 'currency','Currency', 'paypal-rest', 1, 'text', 'USD', NULL ],
+			[ $this->site->id, 'address','Address', 'paypal-rest', 1, 'flag', '0', NULL ],
+			[ $this->site->id, 'sb_client_id','Sandbox Client ID', 'paypal-rest', 1, 'text', NULL, NULL ],
+			[ $this->site->id, 'sb_secret','Sandbox Secret', 'paypal-rest', 1, 'text', NULL, NULL ],
+			[ $this->site->id, 'live_client_id','Live Client ID', 'paypal-rest', 1, 'text', NULL, NULL ],
+			[ $this->site->id, 'live_secret','Live Secret', 'paypal-rest', 1, 'text', NULL, NULL ]
 		];
 
 		$this->batchInsert( $this->prefix . 'core_site_meta', $columns, $attributes );
