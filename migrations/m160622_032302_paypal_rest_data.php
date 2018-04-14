@@ -75,17 +75,17 @@ class m160622_032302_paypal_rest_data extends Migration {
 
 		$config	= Form::findBySlugType( 'config-paypal-rest', CoreGlobal::TYPE_SYSTEM );
 
-		$columns = [ 'formId', 'name', 'label', 'type', 'compress', 'validators', 'order', 'icon', 'htmlOptions' ];
+		$columns = [ 'formId', 'name', 'label', 'type', 'compress', 'meta', 'active', 'validators', 'order', 'icon', 'htmlOptions' ];
 
 		$fields	= [
-			[ $config->id, 'status', 'Status', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{"title":"Status","items":{"sandbox":"Sandbox","live":"Live"}}' ],
-			[ $config->id, 'payments', 'Payments', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{"title":"Payments Enabled"}' ],
-			[ $config->id, 'currency', 'Currency', FormField::TYPE_SELECT, false, 'required', 0, NULL, '{"title":"Currency","items":{"USD":"USD","CAD":"CAD"}}' ],
-			[ $config->id, 'address', 'Address', FormField::TYPE_TOGGLE, false, 'required', 0, NULL, '{"title":"Address Verification"}' ],
-			[ $config->id, 'sb_client_id', 'Sandbox Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{"title":"Sandbox Client ID","placeholder":"Sandbox Client ID"}' ],
-			[ $config->id, 'sb_secret', 'Sandbox Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{"title":"Sandbox Secret","placeholder":"Sandbox Secret"}' ],
-			[ $config->id, 'live_client_id', 'Live Client ID', FormField::TYPE_TEXT, false, 'required', 0, NULL, '{"title":"Live Client ID","placeholder":"Live Client ID"}' ],
-			[ $config->id, 'live_secret', 'Live Secret', FormField::TYPE_PASSWORD, false, 'required', 0, NULL, '{"title":"Live Secret","placeholder":"Live Secret"}' ]
+			[ $config->id, 'status', 'Status', FormField::TYPE_SELECT, false, true, true, 'required', 0, NULL, '{"title":"Status","items":{"sandbox":"Sandbox","live":"Live"}}' ],
+			[ $config->id, 'payments', 'Payments', FormField::TYPE_TOGGLE, false, true, true, 'required', 0, NULL, '{"title":"Payments Enabled"}' ],
+			[ $config->id, 'currency', 'Currency', FormField::TYPE_SELECT, false, true, true, 'required', 0, NULL, '{"title":"Currency","items":{"USD":"USD","CAD":"CAD"}}' ],
+			[ $config->id, 'address', 'Address', FormField::TYPE_TOGGLE, false, true, true, 'required', 0, NULL, '{"title":"Address Verification"}' ],
+			[ $config->id, 'sb_client_id', 'Sandbox Client ID', FormField::TYPE_TEXT, false, true, true, 'required', 0, NULL, '{"title":"Sandbox Client ID","placeholder":"Sandbox Client ID"}' ],
+			[ $config->id, 'sb_secret', 'Sandbox Secret', FormField::TYPE_PASSWORD, false, true, true, 'required', 0, NULL, '{"title":"Sandbox Secret","placeholder":"Sandbox Secret"}' ],
+			[ $config->id, 'live_client_id', 'Live Client ID', FormField::TYPE_TEXT, false, true, true, 'required', 0, NULL, '{"title":"Live Client ID","placeholder":"Live Client ID"}' ],
+			[ $config->id, 'live_secret', 'Live Secret', FormField::TYPE_PASSWORD, false, true, true, 'required', 0, NULL, '{"title":"Live Secret","placeholder":"Live Secret"}' ]
 		];
 
 		$this->batchInsert( $this->prefix . 'core_form_field', $columns, $fields );
