@@ -106,5 +106,4 @@ class PaypalRest extends Component {
 
 		$factory->set( 'paypalRestService', 'cmsgears\paypal\rest\common\services\system\PaypalRestService' );
 	}
-
 }

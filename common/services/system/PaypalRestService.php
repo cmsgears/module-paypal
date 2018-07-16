@@ -28,6 +28,11 @@ use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 
+use PayPal\Api\Payout;
+use PayPal\Api\PayoutSenderBatchHeader;
+use PayPal\Api\PayoutItem;
+use PayPal\Api\Currency;
+
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestProperties;
 
@@ -211,6 +216,108 @@ class PaypalRestService extends SystemService implements IPaypalRestService {
 		$payment->create( $context );
 
 		return $payment;
+	}
+
+	public function createPayout( $config = [] ) {
+		
+		$email		= $config[ 'email' ] ?? null;
+		$amount		= $config[ 'amount' ] ?? null;
+		$currency	= $config[ 'currency' ] ?? null;
+		$itemId		= $config[ 'itemId' ] ?? null;
+		$message	= $config[ 'message' ] ?? 'Thanks for your patronage!';
+		$type		= $config[ 'type' ] ?? null;
+		$subject	= $config[ 'subject' ] ?? "You have a Payout!";
+		$batchId	= $config[ 'batchId' ] ?? uniqid();
+		// Create a new instance of Payout object
+		$payouts = new Payout();
+
+		// This is how our body should look like:
+		/*
+		 * {
+					"sender_batch_header":{
+						"sender_batch_id":"2014021801",
+						"email_subject":"You have a Payout!"
+					},
+					"items":[
+						{
+							"recipient_type":"EMAIL",
+							"amount":{
+								"value":"1.0",
+								"currency":"USD"
+							},
+							"note":"Thanks for your patronage!",
+							"sender_item_id":"2014031400023",
+							"receiver":"shirt-supplier-one@mail.com"
+						}
+					]
+				}
+		 */
+
+		$senderBatchHeader = new PayoutSenderBatchHeader();
+		// ### NOTE:
+		// You can prevent duplicate batches from being processed. If you specify a `sender_batch_id` that was used in the last 30 days, the batch will not be processed. For items, you can specify a `sender_item_id`. If the value for the `sender_item_id` is a duplicate of a payout item that was processed in the last 30 days, the item will not be processed.
+
+		
+		//uniqid()
+		// #### Batch Header Instance
+		$senderBatchHeader->setSenderBatchId( $batchId )
+			->setEmailSubject($subject);
+
+		// #### Sender Item
+		// Please note that if you are using single payout with sync mode, you can only pass one Item in the request
+		$senderItem = new PayoutItem();
+		
+		$payoutAmount	= new Currency("{
+								\"value\":\"$amount\",
+								\"currency\":\"$currency\"
+							}");
+		
+		$senderItem->setRecipientType($type)
+			->setNote($message)
+			->setReceiver($email)
+			->setSenderItemId($itemId)
+			->setAmount( $payoutAmount );
+
+		$payouts->setSenderBatchHeader($senderBatchHeader)->addItem($senderItem);
+
+		// For Sample Purposes Only.
+		$request = clone $payouts;
+
+		$apiContext = $this->getApiContext();
+
+		// ### Create Payout
+		try {
+			
+			$output = $payouts->create( [], $apiContext);
+			
+		}
+
+		catch (Exception $ex) {
+
+			// NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
+			//ResultPrinter::printError("Created Single Synchronous Payout", "Payout", null, $request, $ex);
+			exit(1);
+		}
+
+		// NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
+		 //ResultPrinter::printResult("Created Single Synchronous Payout", "Payout", $output->getBatchHeader()->getPayoutBatchId(), $request, $output);
+
+		return $output;
+	}
+	
+	public function getPayoutBatch( $payoutBatchId ) {
+		
+		$apiContext = $this->getApiContext();
+		
+		$payouts = new Payout();
+		
+		$output = $payouts->get($payoutBatchId, $apiContext );
+		
+		return $output;
+	}
+	
+	public function getPayoutItemDetails(  $payoutItmeId ) {
+		
 	}
 
 	public function executePayment( $paymentId, $token, $payerId ) {
