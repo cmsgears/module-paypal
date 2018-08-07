@@ -220,7 +220,7 @@ class PaypalRestService extends SystemService implements IPaypalRestService {
 
 	public function createPayout( $config = [] ) {
 		
-		$email		= $config[ 'email' ] ?? null;
+		$receiver	= $config[ 'receiver' ] ?? null;
 		$amount		= $config[ 'amount' ] ?? null;
 		$currency	= $config[ 'currency' ] ?? null;
 		$itemId		= $config[ 'itemId' ] ?? null;
@@ -274,7 +274,7 @@ class PaypalRestService extends SystemService implements IPaypalRestService {
 		
 		$senderItem->setRecipientType($type)
 			->setNote($message)
-			->setReceiver($email)
+			->setReceiver($receiver)
 			->setSenderItemId($itemId)
 			->setAmount( $payoutAmount );
 
