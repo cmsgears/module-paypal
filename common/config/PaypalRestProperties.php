@@ -1,14 +1,29 @@
 <?php
+/**
+ * This file is part of CMSGears Framework. Please view License file distributed
+ * with the source code for license details.
+ *
+ * @link https://www.cmsgears.org/
+ * @copyright Copyright (c) 2015 VulpineCode Technologies Pvt. Ltd.
+ */
+
 namespace cmsgears\paypal\rest\common\config;
 
 // CMG Imports
 use cmsgears\paypal\rest\common\config\PaypalRestGlobal;
 
-class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
+use cmsgears\core\common\config\Properties;
+
+/**
+ * PaypalRestProperties provide methods to access the properties specific to paypal.
+ *
+ * @since 1.0.0
+ */
+class PaypalRestProperties extends Properties {
 
 	// Variables ---------------------------------------------------
 
-	// Global -----------------
+	// Globals ----------------
 
 	const PROP_STATUS			= 'status';
 	const PROP_PAYMENTS			= 'payments';
@@ -27,21 +42,15 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 
 	// Private ----------------
 
-	// Singleton instance
 	private static $instance;
+
+	// Traits ------------------------------------------------------
 
 	// Constructor and Initialisation ------------------------------
 
-	// Instance methods --------------------------------------------
-
-	// Yii parent classes --------------------
-
-	// CMG parent classes --------------------
-
-	// PaypalRestProperties ------------------
-
-	// Singleton
-
+	/**
+	 * Return Singleton instance.
+	 */
 	public static function getInstance() {
 
 		if( !isset( self::$instance ) ) {
@@ -54,30 +63,65 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 		return self::$instance;
 	}
 
-	// Properties
+	// Instance methods --------------------------------------------
 
+	// Yii interfaces ------------------------
+
+	// Yii parent classes --------------------
+
+	// CMG interfaces ------------------------
+
+	// CMG parent classes --------------------
+
+	// PaypalRestProperties ------------------
+
+	/**
+	 * Return the status among live or sandbox.
+	 *
+	 * @return string
+	 */
 	public function getStatus() {
 
 		return $this->properties[ self::PROP_STATUS ];
 	}
 
+	/**
+	 * Check whether payments are enabled for PayPal.
+	 *
+	 * @return boolean
+	 */
 	public function isPayments() {
 
 		return $this->properties[ self::PROP_PAYMENTS ];
 	}
 
+	/**
+	 * Check whether status is set to either sandbox or live.
+	 *
+	 * @return boolean
+	 */
 	public function isActive() {
 
 		$status = $this->properties[ self::PROP_STATUS ];
 
-		return strcmp( $status, 'sandbox' ) == 0 || strcmp( $status, 'live' ) == 0;
+		return $status === 'sandbox' || $status === 'live';
 	}
 
+	/**
+	 * Returns the currency configured for PayPal.
+	 *
+	 * @return string
+	 */
 	public function getCurrency() {
 
 		return $this->properties[ self::PROP_CURRENCY ];
 	}
 
+	/**
+	 * Check whether address verification is enabled for PayPal.
+	 *
+	 * @return string
+	 */
 	public function isSendAddress() {
 
 		$sendAddress = $this->properties[ self::PROP_SEND_ADDRESS ];
@@ -85,28 +129,54 @@ class PaypalRestProperties extends \cmsgears\core\common\config\CmgProperties {
 		return $sendAddress;
 	}
 
+	/**
+	 * Returns the client id for sandbox mode.
+	 *
+	 * @return string
+	 */
 	public function getSandboxClientId() {
 
 		return $this->properties[ self::PROP_SB_CLIENT_ID ];
 	}
 
+	/**
+	 * Returns the secret for sandbox mode.
+	 *
+	 * @return string
+	 */
 	public function getSandboxSecret() {
 
 		return $this->properties[ self::PROP_SB_SECRET ];
 	}
 
+	/**
+	 * Returns the client id for live mode.
+	 *
+	 * @return string
+	 */
 	public function getLiveClientId() {
 
 		return $this->properties[ self::PROP_LIVE_CLIENT_ID ];
 	}
 
+	/**
+	 * Returns the secret for live mode.
+	 *
+	 * @return string
+	 */
 	public function getLiveSecret() {
 
 		return $this->properties[ self::PROP_LIVE_SECRET ];
 	}
 
+	/**
+	 * Check whether PayPal can be used to handle payments.
+	 *
+	 * @return boolean
+	 */
 	public function isPaymentActive() {
 
 		return $this->isActive() && $this->isPaymentEnabled();
 	}
+
 }

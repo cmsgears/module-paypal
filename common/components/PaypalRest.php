@@ -1,10 +1,24 @@
 <?php
+/**
+ * This file is part of CMSGears Framework. Please view License file distributed
+ * with the source code for license details.
+ *
+ * @link https://www.cmsgears.org/
+ * @copyright Copyright (c) 2015 VulpineCode Technologies Pvt. Ltd.
+ */
+
 namespace cmsgears\paypal\rest\common\components;
 
 // Yii Imports
 use Yii;
+use yii\base\Component;
 
-class PaypalRest extends \yii\base\Component {
+/**
+ * PaypalRest component register the services provided by Paypal REST Module.
+ *
+ * @since 1.0.0
+ */
+class PaypalRest extends Component {
 
 	// Global -----------------
 
@@ -17,13 +31,13 @@ class PaypalRest extends \yii\base\Component {
 	// Constructor and Initialisation ------------------------------
 
 	/**
-	 * Initialise the CMG Core Component.
+	 * Initialize the services.
 	 */
 	public function init() {
 
 		parent::init();
 
-		// Register application components and objects i.e. CMG and Project
+		// Register components and objects
 		$this->registerComponents();
 	}
 
@@ -35,28 +49,37 @@ class PaypalRest extends \yii\base\Component {
 
 	// PaypalRest ----------------------------
 
-	// Properties
+	// Properties ----------------
 
-	// Components and Objects
+	// Components and Objects ----
 
+	/**
+	 * Register the services.
+	 */
 	public function registerComponents() {
 
 		// Register services
-		$this->registerEntityServices();
+		$this->registerResourceServices();
 		$this->registerSystemServices();
 
 		// Init services
-		$this->initEntityServices();
+		$this->initResourceServices();
 		$this->initSystemServices();
 	}
 
-	public function registerEntityServices() {
+	/**
+	 * Registers resource services.
+	 */
+	public function registerResourceServices() {
 
 		$factory = Yii::$app->factory->getContainer();
 
-		$factory->set( 'cmsgears\paypal\rest\common\services\interfaces\entities\ITransactionService', 'cmsgears\paypal\rest\common\services\entities\TransactionService' );
+		$factory->set( 'cmsgears\paypal\rest\common\services\interfaces\resources\ITransactionService', 'cmsgears\paypal\rest\common\services\resources\TransactionService' );
 	}
 
+	/**
+	 * Registers system services.
+	 */
 	public function registerSystemServices() {
 
 		$factory = Yii::$app->factory->getContainer();
@@ -64,13 +87,19 @@ class PaypalRest extends \yii\base\Component {
 		$factory->set( 'cmsgears\paypal\rest\common\services\interfaces\system\IPaypalRestService', 'cmsgears\paypal\rest\common\services\system\PaypalRestService' );
 	}
 
-	public function initEntityServices() {
+	/**
+	 * Initialize resource services.
+	 */
+	public function initResourceServices() {
 
 		$factory = Yii::$app->factory->getContainer();
 
-		$factory->set( 'paypalTransactionService', 'cmsgears\paypal\rest\common\services\entities\TransactionService' );
+		$factory->set( 'paypalTransactionService', 'cmsgears\paypal\rest\common\services\resources\TransactionService' );
 	}
 
+	/**
+	 * Initialize system services.
+	 */
 	public function initSystemServices() {
 
 		$factory = Yii::$app->factory->getContainer();
